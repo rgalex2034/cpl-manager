@@ -1,0 +1,3 @@
+docker-inject/*
+!docker-inject/README.md
+app/database/*
