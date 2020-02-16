@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <title>CPL Manager</title>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css"/>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.js"></script>
+
+    </head>
+    <body>
+        <h1>CPL Manager</h1>
+        <p>
+            Here, you can select a table, look at the data, and register any changes on it.
+        </p>
+        <form>
+            <div>
+                <label>Please, choose a table</label>
+                <select id="table-select">
+                    <option value="">Pick one...</option>
+                    <optgroup id="table-options" label="Tables"></optgroup>
+                </select>
+            </div>
+        </form>
+        <div id="data-table-wrapper">
+        </div>
+        <template id="data-table-template">
+            <table>
+                <thead>
+                </thead>
+            </table>
+        </template>
+    </body>
+</html>
