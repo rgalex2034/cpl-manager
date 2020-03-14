@@ -23,5 +23,9 @@ def get_table_rows(name):
     else:
         return  json.dumps("Table not found"), 404
 
+@app.route("/api/sync/<int:id>")
+def sync_database():
+    return json.dumps("Error: not implemented yet"), 501, {"Content-Type": "application/json"}
+
 if __name__ == "__main__":
     app.run()
