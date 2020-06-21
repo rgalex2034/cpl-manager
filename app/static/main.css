@@ -1,0 +1,11 @@
+#cpl-edit-table > tbody > tr > td > div {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+#modal-edit-cell form > textarea {
+    width: 100%;
+    height: 450px;
+}

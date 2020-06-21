@@ -2,3 +2,7 @@ docker-inject/*
 !docker-inject/README.md
 app/database/*
 .env
+*.swp
+*.swo
+*.db
+*.bkp

@@ -41,23 +41,51 @@ Cpl.prototype = {
         var self = this;
         this.get_table_data(table_name).then(function(rows){
             if(!rows) return;
+
+            //Preprocess rows
+            for(var idx in rows){
+                rows[idx] = self._pre_process_row(rows[idx]);
+            }
+
+            //Delete and recreate the initial empty table
             self.data_table.destroy();
             self._clean_table();
+
             var $table = self.$table_wrapper.find("table");
             var $header = $table.find("thead");
             $table.find("tbody").remove();
+
+            //Append header
             for(key in rows[0]){
                 var th = document.createElement("th");
                 th.appendChild(document.createTextNode(key));
                 $header.append(th);
             }
+
+            $table.on("click", "tbody > tr > td > div", function(){
+                var $row = $(this).closest("tr");
+                var id   = $row.find("td").first().text();
+                var $modal = $("#modal-edit-cell");
+                $modal.modal().find("form > [name=value]").val(this.innerText);
+                $modal.find("form > [name=id]").val(id);
+            });
+
+            //Load datatable with rows
             self.data_table = $table.DataTable({
                 data: rows,
                 columns: Object.keys(rows[0]).map(function(key){
                     return { data: key};
                 })
             });
+
         });
+    },
+
+    _pre_process_row(row){
+        for(var key in row){
+            row[key] = "<div>" + row[key] + "</div>";
+        }
+        return row;
     },
 
     _clean_table: function(){
