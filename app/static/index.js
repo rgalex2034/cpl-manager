@@ -66,7 +66,7 @@ Cpl.prototype = {
                 var $row = $(this).closest("tr");
                 var id   = $row.find("td").first().text();
                 var $modal = $("#modal-edit-cell");
-                $modal.modal().find("form > [name=value]").val(this.innerText);
+                $modal.modal().find("form > [name=value]").val(this.innerHTML);
                 $modal.find("form > [name=id]").val(id);
             });
 
