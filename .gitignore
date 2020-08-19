@@ -6,3 +6,4 @@ app/database/*
 *.swo
 *.db
 *.bkp
+.DS_Store

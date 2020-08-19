@@ -34,7 +34,7 @@ Cpl.prototype = {
     },
 
     get_table_data: function(table_name){
-        return $.get("api/table/"+table_name);
+        return $.get("api/table/" + table_name);
     },
 
     load_table_data: function(table_name){
@@ -62,19 +62,44 @@ Cpl.prototype = {
                 $header.append(th);
             }
 
+            //Fill the data of the edit cell dialog
             $table.on("click", "tbody > tr > td > div", function(){
+
+                //Get html elements
                 var $row = $(this).closest("tr");
-                var id   = $row.find("td").first().text();
                 var $modal = $("#modal-edit-cell");
-                $modal.modal().find("form > [name=value]").val(this.innerHTML);
+                var $td = $(this).closest("td");
+
+                //Get data
+                var id = $row.find("td").first().text();
+                var value = this.innerHTML;
+                var column_name = $td.closest('table').find('th').eq($td.index()).text();
+                
+                //Set the data into the dialog
                 $modal.find("form > [name=id]").val(id);
+                $modal.modal().find("form > [name=value]").val(value);
+
+                //Set save button onclick event function
+                document.getElementById("modal-edit-save-button").onclick = function(){
+
+                    var new_value = document.getElementById("modal-edit-value").value
+                        
+                    //Check if it is actually necessary to update the database (there are changes)
+                    if(value != new_value){
+
+                        //$.post("api/update/" + table_name + "/" + column_name + "/" + id)
+
+                    }
+
+                }
+
             });
 
             //Load datatable with rows
             self.data_table = $table.DataTable({
                 data: rows,
                 columns: Object.keys(rows[0]).map(function(key){
-                    return { data: key};
+                    return { data: key };
                 })
             });
 

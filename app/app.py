@@ -21,7 +21,7 @@ def get_table_rows(name):
     if name in tables:
         return json.dumps(cpl.get_table_data(name)), 200, {"Content-Type": "application/json"}
     else:
-        return  json.dumps("Table not found"), 404
+        return json.dumps("Table not found"), 404
 
 @app.route("/api/sync/<int:id>")
 def sync_database():
