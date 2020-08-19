@@ -87,7 +87,11 @@ Cpl.prototype = {
                     //Check if it is actually necessary to update the database (there are changes)
                     if(value != new_value){
 
-                        //$.post("api/update/" + table_name + "/" + column_name + "/" + id)
+                        $.ajax("api/update/" + table_name + "/" + id + "/" + column_name, {
+                            method: "POST",
+                            contentType: "text/plain",
+                            data: new_value
+                        });
 
                     }
 
