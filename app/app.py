@@ -23,6 +23,17 @@ def get_table_rows(name):
     else:
         return json.dumps("Table not found"), 404
 
+@app.route("/update/<string:table>/<int:id>/<string:column>")
+def update_field(table, id, column):
+    cpl = Cpl.get_default()
+    new_value = request.data
+    return new_value, 200, {"Content-Type": "text/plain"}
+#    res = cpl.update_field(table, id, column)
+#    if res == true:
+#        return "{'result': 'ok'}", 200, {"Content-Type": "application/json"}
+#    else:
+#        return  json.dumps("Table not found"), 404
+
 @app.route("/api/sync/<int:id>")
 def sync_database():
     return json.dumps("Error: not implemented yet"), 501, {"Content-Type": "application/json"}
