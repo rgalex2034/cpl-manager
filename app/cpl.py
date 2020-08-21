@@ -1,5 +1,6 @@
 import sqlite3
 from os import path
+import sys
 
 class Cpl:
 
@@ -35,10 +36,10 @@ class Cpl:
         cur.close()
         return tables
 
-    def get_table_data(self, table_name):
+    def get_table_data(self, table):
         conn = self._get_connection()
         cur = conn.cursor()
-        cur.execute(f"SELECT * FROM {table_name}")
+        cur.execute(f"SELECT * FROM {table}")
         rows = cur.fetchall()
         cur.close()
         if len(rows) == 0:
@@ -54,6 +55,20 @@ class Cpl:
             data.append(row_dic)
         return data
 
+    def update_field(self, table, column, id, new_value):
+        try:
+            sqliteConnection = self._get_connection()
+            cursor = sqliteConnection.cursor()
+            query = "UPDATE {0} SET {1} = '{2}' WHERE id = {3}"
+            query = query.format(table, column, new_value, id)
+            cursor.execute(query)
+            sqliteConnection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+            
     def __del__(self):
         if self._conn != None:
             self._conn.close()

@@ -2,6 +2,7 @@
 from flask import Flask, escape, request, render_template
 from cpl import Cpl
 import json
+import sys
 
 app = Flask(__name__)
 
@@ -23,16 +24,14 @@ def get_table_rows(name):
     else:
         return json.dumps("Table not found"), 404
 
-@app.route("/api/update/<string:table>/<int:id>/<string:column>", methods = ['POST'])
-def update_field(table, id, column):
+@app.route("/api/update/<string:table>/<string:column>/<int:id>", methods = ['POST'])
+def update_field(table, column, id):
     cpl = Cpl.get_default()
-    new_value = request.data
-    return new_value, 200, {"Content-Type": "text/plain"}
-#    res = cpl.update_field(table, id, column)
-#    if res == true:
-#        return "{'result': 'ok'}", 200, {"Content-Type": "application/json"}
-#    else:
-#        return  json.dumps("Table not found"), 404
+    new_value = json.loads(request.data)["data"]
+    if cpl.update_field(table, column, id, new_value):
+        return "", 200
+    else:
+        return "", 404
 
 @app.route("/api/sync/<int:id>")
 def sync_database():
