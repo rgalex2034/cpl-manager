@@ -79,6 +79,10 @@ Cpl.prototype = {
                 $modal.find("form > [name=id]").val(id);
                 $modal.modal().find("form > [name=value]").val(value);
 
+                //Get row/col indexs
+                var row_index = $(this).closest("tr").index();
+                var col_index = $(this).parent().index();
+
                 //Set save button onclick event function
                 document.getElementById("modal-edit-save-button").onclick = function(){
 
@@ -87,13 +91,20 @@ Cpl.prototype = {
                     //Check if it is actually necessary to update the database (there are changes)
                     if(value != new_value){
 
+                        //Make the update to the database
                         $.ajax("api/update/" + table_name + "/" + column_name + "/" + id, {
                             method: "POST",
                             contentType: "application/json",
                             data: `{ "data": "${new_value}" }`
                         });
 
+                        //Update html data from this element
+                        $table.find('tr:eq(' + row_index + ') t' + (row_index == 0 ?  "h" : "d") + ':eq(' + col_index + ')').html('').append(new_value);
+
                     }
+
+                    //Hide modal
+                    $modal.modal("hide")
 
                 }
 
