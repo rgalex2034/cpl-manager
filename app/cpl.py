@@ -1,6 +1,7 @@
 import sqlite3
 from os import path
 import sys
+import json
 
 class Cpl:
 
@@ -25,7 +26,7 @@ class Cpl:
     def get_tables(self):
         conn = self._get_connection()
         cur = conn.cursor()
-        #Grab all tables that do not start with 'sqlite_' or '_'.
+        #Grab all tables that do not start with 'sqlite_' nor '_'.
         #Also, do not present 'anyliturgic', as this table has no ID and it's based on a year column.
         cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN ('anyliturgic') AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '\_%' ESCAPE '\\'")
         tables = []
@@ -68,6 +69,23 @@ class Cpl:
         except Exception as e:
             print(e)
             return False
+
+    def get_changes(self, id):
+        conn = self._get_connection()
+        cur = conn.cursor()
+        cur.execute(f"SELECT * FROM _tables_log WHERE id > {id} ORDER BY id ASC")
+        rows = cur.fetchall()
+        cur.close()
+        
+        #Convert rows to a dictionary
+        keys = rows[0].keys()
+        data = []
+        for row in rows:
+            row_dic = {}
+            for key in keys:
+                row_dic[key] = row[key]
+            data.append(row_dic)
+        return data
             
     def __del__(self):
         if self._conn != None:

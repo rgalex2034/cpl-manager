@@ -34,8 +34,9 @@ def update_field(table, column, id):
         return "", 404
 
 @app.route("/api/sync/<int:id>")
-def sync_database():
-    return json.dumps("Error: not implemented yet"), 501, {"Content-Type": "application/json"}
+def sync_database(id):
+    cpl = Cpl.get_default()
+    return json.dumps(cpl.get_changes(id)), 200, {"Content-Type": "application/json"}
 
 if __name__ == "__main__":
     app.run()
