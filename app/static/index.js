@@ -92,14 +92,17 @@ Cpl.prototype = {
                     if(value != new_value){
 
                         //Make the update to the database
-                        $.ajax("api/update/" + table_name + "/" + column_name + "/" + id, {
+                        ajax_res = $.ajax("api/update/" + table_name + "/" + column_name + "/" + id, {
                             method: "POST",
                             contentType: "application/json",
-                            data: `{ "data": "${new_value}" }`
-                        });
+                            data: `{ "data": "${new_value}" }`,
+                            success: function(){
 
-                        //Update html data from this element
-                        $table.find('tr:eq(' + row_index + ') t' + (row_index == 0 ?  "h" : "d") + ':eq(' + col_index + ')').html('').append(new_value);
+                                //Update html data from this element
+                                $table.find('tr:eq(' + row_index + ') t' + (row_index == 0 ?  "h" : "d") + ':eq(' + col_index + ')').html('').append(new_value);
+                            
+                            }
+                        });
 
                     }
 

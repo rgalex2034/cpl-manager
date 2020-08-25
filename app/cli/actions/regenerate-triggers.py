@@ -1,9 +1,11 @@
+#Execution: ./app/cpl-cli.py regenerate-triggers
+
 import sqlite3, getopt
 
 class RegenerateTriggers:
 
     def boot(self, app_root, args):
-        self.delete_triggers = False
+        self.delete_triggers = True
         self.app_root = app_root
         self.conn = sqlite3.connect(app_root + "/database/cpl.db")
 
@@ -37,6 +39,7 @@ class RegenerateTriggers:
                     INSERT INTO _tables_log (table_name, row_id, action, date)\
                     VALUES ('{table_name}', new.id, 1, datetime('now'));\
                 END;")
+
             #Update trigger
             print(f"Regenerating update trigger for {table_name}")
             if self.delete_triggers:
@@ -47,6 +50,7 @@ class RegenerateTriggers:
                     INSERT INTO _tables_log (table_name, row_id, action, date)\
                     VALUES ('{table_name}', old.id, 2, datetime('now'));\
                 END;")
+
             #Delete trigger
             print(f"Regenerating delete trigger for {table_name}")
             if self.delete_triggers:

@@ -76,16 +76,40 @@ class Cpl:
         cur.execute(f"SELECT * FROM _tables_log WHERE id > {id} ORDER BY id ASC")
         rows = cur.fetchall()
         cur.close()
-        
+        if len(rows) == 0:
+            return {}
+
         #Convert rows to a dictionary
         keys = rows[0].keys()
-        data = []
+        data_json = []
+        i = 0
         for row in rows:
             row_dic = {}
             for key in keys:
+
+                #Add key-value
                 row_dic[key] = row[key]
-            data.append(row_dic)
-        return data
+
+                #Check for action UPDATE (2) in order to add all the column-values
+                if key == 'action' and row[key] == 2:
+                    table_name = row_dic["table_name"]
+                    row_dic["values"] = {}
+                    cur = conn.cursor()
+                    cur.execute(f"SELECT * FROM {table_name}")
+                    values = cur.fetchall()[0]
+                    value_keys = values.keys()
+                    cur.close()
+                    j = 0
+                    for value in values:
+                        row_dic["values"][value_keys[j]] = value
+                        j += 1
+
+            data_json.append(row_dic)
+            i += 1
+
+        #TODO: preparar el json que s'envia amb el format que l'app espera
+        
+        return data_json
             
     def __del__(self):
         if self._conn != None:
