@@ -93,9 +93,10 @@ class Cpl:
                 #Check for action UPDATE (2) in order to add all the column-values
                 if key == 'action' and row[key] == 2:
                     table_name = row_dic["table_name"]
+                    row_id = row_dic["row_id"]
                     row_dic["values"] = {}
                     cur = conn.cursor()
-                    cur.execute(f"SELECT * FROM {table_name}")
+                    cur.execute(f"SELECT * FROM {table_name} WHERE id = {row_id}")
                     values = cur.fetchall()[0]
                     value_keys = values.keys()
                     cur.close()
@@ -107,8 +108,6 @@ class Cpl:
             data_json.append(row_dic)
             i += 1
 
-        #TODO: preparar el json que s'envia amb el format que l'app espera
-        
         return data_json
             
     def __del__(self):
